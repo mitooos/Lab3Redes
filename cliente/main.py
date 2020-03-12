@@ -1,4 +1,5 @@
 import socket
+import hashlib
 
 host = '127.0.0.1'
 port = 12345
@@ -24,6 +25,9 @@ def connect():
     tamano_archivo = int.from_bytes(s.recv(8),'big')
     total = 0 #cantidad de archivo recibido
     s.send(('Recibido tamano del archivo' + str(tamano_archivo)).encode('ascii'))
+
+     # objeto hash
+    h = hashlib.sha1()
     
     # recibe segmentos del archivo
     while True:
@@ -33,12 +37,17 @@ def connect():
             break
         seg = s.recv(1024)
         total += len(seg)
+        h.update(seg)
         f.write(seg)
     f.close()
 
     #espera el hash
-    hash_archivo_enviado = s.recv(2014)
-    print(hash_archivo_enviado)
+    hash_archivo_enviado = s.recv(2014).decode('ascii')
+    hash_archivo_calculado = h.hexdigest()
+    if hash_archivo_calculado == hash_archivo_enviado:
+        print('Los hash coinciden')
+    else:
+        print('Los hash no coinciden')
 
     s.close()
 
