@@ -26,7 +26,7 @@ def thread(conn, i):
 
     conn.send('Que archivo desea?'.encode('ascii'))
 
-    numero_archivo = int(conn.recv(1024).decode('ascii'))
+    numero_archivo = int.from_bytes(conn.recv(1),'big')
 
     #espera a que todos los clientes esten listos para enviar el archivo
     while True:
@@ -36,15 +36,19 @@ def thread(conn, i):
             break
 
     if numero_archivo == 1:
+        conn.send(len(arch1).to_bytes(4,'big'))
         conn.send(arch1.encode('ascii')) #envia nombre del archivo
-        conn.send(str(os.path.getsize(arch1)).encode('ascii')) # envia tamaño del archivo
+        conn.send(os.path.getsize(arch1).to_bytes(8,'big')) # envia tamaño del archivo
         f = open(arch1, 'rb')
 
     if numero_archivo == 2:
+        conn.send(len(arch2).to_bytes(4,'big'))
         conn.send(arch1.encode('ascii')) #envia nombre del archivo
-        conn.send(str(os.path.getsize(arch2)).encode('ascii')) # envia tamaño del archivo
+        conn.send(os.path.getsize(arch2).to_bytes(8,'big')) # envia tamaño del archivo
         f = open(arch2, 'rb')
     
+    conn.recv(1024)
+
     # objeto hash
     h = hashlib.sha1()
 

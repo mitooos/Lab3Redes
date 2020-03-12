@@ -13,16 +13,17 @@ def connect():
 
     #envia numero de archivo que desea descargar
     numero_archivo = 1
-    s.send(str(numero_archivo).encode('ascii'))
+    s.send(numero_archivo.to_bytes(1,'big'))
 
     #recibe archivo
-    nombre_archivo = s.recv(1024).decode('ascii')
+    size_nombre_archivo = int.from_bytes(s.recv(4), 'big')
+    nombre_archivo = s.recv(size_nombre_archivo)
     f = open(nombre_archivo, 'wb')
     s.send('Recibido nombre del archivo'.encode('ascii'))
     
-    tamano_archivo = int(s.recv(1024).decode('ascii'))
+    tamano_archivo = int.from_bytes(s.recv(8),'big')
     total = 0 #cantidad de archivo recibido
-    s.send('Recibido tamano del archivo'.encode('ascii'))
+    s.send(('Recibido tamano del archivo' + str(tamano_archivo)).encode('ascii'))
     
     # recibe segmentos del archivo
     while True:
