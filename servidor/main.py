@@ -4,6 +4,8 @@ import threading
 import hashlib
 import os
 
+buff_size = 1024
+
 port = 12345
 
 conexiones_esperadas = 1
@@ -53,11 +55,11 @@ def thread(conn, i):
     h = hashlib.sha1()
 
     #envia segmentos del archivo
-    seg = f.read(1024)
+    seg = f.read(buff_size)
     while seg:
         conn.send(seg)
         h.update(seg) #actualiza el hash
-        seg = f.read(1024)
+        seg = f.read(buff_size)
     f.close()
 
     print('Se envio el archivo al cliente: ', i)

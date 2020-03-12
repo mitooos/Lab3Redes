@@ -3,6 +3,7 @@ import hashlib
 
 host = '127.0.0.1'
 port = 12345
+buff_size = 1024
 
 def connect():
     s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
@@ -35,7 +36,7 @@ def connect():
         if tamano_archivo == total:
             print('Recibido todo el archivo')
             break
-        seg = s.recv(1024)
+        seg = s.recv(buff_size)
         total += len(seg)
         h.update(seg)
         f.write(seg)
