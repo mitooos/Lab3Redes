@@ -32,7 +32,6 @@ def thread(conn, i):
     while True:
         if esperando:
             print('Esperando el numero de clientes')
-            continue
         else:
             break
 
