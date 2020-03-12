@@ -1,6 +1,8 @@
 import socket
 from _thread import *
 import threading
+import hashlib
+import os
 
 port = 12345
 
@@ -35,21 +37,32 @@ def thread(conn, i):
             break
 
     if numero_archivo == 1:
-        conn.send(arch1.encode('ascii'))
+        conn.send(arch1.encode('ascii')) #envia nombre del archivo
+        conn.send(str(os.path.getsize(arch1)).encode('ascii')) # envia tamaño del archivo
         f = open(arch1, 'rb')
 
     if numero_archivo == 2:
-        conn.send(arch1.encode('ascii'))
+        conn.send(arch1.encode('ascii')) #envia nombre del archivo
+        conn.send(str(os.path.getsize(arch2)).encode('ascii')) # envia tamaño del archivo
         f = open(arch2, 'rb')
     
-    #envia sefmentos del archivo
+    # objeto hash
+    h = hashlib.sha1()
+
+    #envia segmentos del archivo
     seg = f.read(1024)
     while seg:
         conn.send(seg)
+        h.update(seg) #actualiza el hash
         seg = f.read(1024)
     f.close()
 
     print('Se envio el archivo al cliente: ', i)
+
+    hash_archivo = h.hexdigest()
+    conn.send(hash_archivo.encode('ascii'))
+    print('se envio el hash del archivo al cliente: ', i)
+    print(hash_archivo)
 
     conn.close()
 
@@ -66,8 +79,11 @@ def receive_connections():
         conexiones += 1
         print('Conectado con el cliente en: ', addr[0], ':', addr[1])
         start_new_thread(thread, (c,conexiones))
+
+        #avisa que ya hay la cantidad de clientes necesarios para enviar el archivo
         global esperando
         esperando =  conexiones < conexiones_esperadas
+        
     s.close()
 
 

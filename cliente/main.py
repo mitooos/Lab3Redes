@@ -7,7 +7,7 @@ def connect():
     s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
     s.connect((host,port)) 
 
-    s.send('ehlo'.encode('ascii'))
+    s.send('Listo para recibir el archivo'.encode('ascii'))
 
     print(s.recv(1024).decode('ascii'))
 
@@ -18,17 +18,26 @@ def connect():
     #recibe archivo
     nombre_archivo = s.recv(1024).decode('ascii')
     f = open(nombre_archivo, 'wb')
+    s.send('Recibido nombre del archivo'.encode('ascii'))
+    
+    tamano_archivo = int(s.recv(1024).decode('ascii'))
+    total = 0 #cantidad de archivo recibido
+    s.send('Recibido tamano del archivo'.encode('ascii'))
     
     # recibe segmentos del archivo
     while True:
         # print('Recibiendo')
-        seg = s.recv(2014)
-        print(seg)
-        if seg == b'':
+        if tamano_archivo == total:
             print('Recibido todo el archivo')
             break
+        seg = s.recv(1024)
+        total += len(seg)
         f.write(seg)
     f.close()
+
+    #espera el hash
+    hash_archivo_enviado = s.recv(2014)
+    print(hash_archivo_enviado)
 
     s.close()
 
