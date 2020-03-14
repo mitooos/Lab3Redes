@@ -3,6 +3,7 @@ from _thread import *
 import threading
 import hashlib
 import os
+import time
 
 buff_size = 1024
 
@@ -37,6 +38,9 @@ def thread(conn, i):
         else:
             break
 
+    tiempo_inicio=time.time()
+
+
     if numero_archivo == 1:
         conn.send(len(arch1).to_bytes(4,'big'))
         conn.send(arch1.encode('ascii')) #envia nombre del archivo
@@ -69,6 +73,8 @@ def thread(conn, i):
     print('se envio el hash del archivo al cliente: ', i)
     print(hash_archivo)
 
+    tiempo_final = round(time.time() - tiempo_inicio,5)
+    print("El tiempo transcurrido fue: "+ str(tiempo_final))
     conn.close()
 
 
