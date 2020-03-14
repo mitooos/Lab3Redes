@@ -7,11 +7,11 @@ import time
 
 buff_size = 1024
 
-port = 12345
+port = 8080
 
 conexiones_esperadas = 1
 
-host = ''
+host = '0.0.0.0'
 
 print_lock = threading.Lock()
 
@@ -74,7 +74,7 @@ def thread(conn, i):
     print(hash_archivo)
 
     tiempo_final = round(time.time() - tiempo_inicio,5)
-    print("El tiempo transcurrido fue: "+ str(tiempo_final))
+    print("El tiempo transcurrido fue: "+ str(tiempo_final)+" segundos")
     conn.close()
 
 

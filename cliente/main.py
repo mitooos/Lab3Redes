@@ -1,8 +1,8 @@
 import socket
 import hashlib
 
-host = '127.0.0.1'
-port = 12345
+host = '54.80.87.195'
+port = 8080
 buff_size = 1024
 
 def connect():
