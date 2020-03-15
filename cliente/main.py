@@ -32,7 +32,7 @@ def connect():
     
     # recibe segmentos del archivo
     while True:
-        # print('Recibiendo')
+        #print('Recibiendo')
         if tamano_archivo == total:
             print('Recibido todo el archivo')
             break
