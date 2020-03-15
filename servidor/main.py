@@ -65,7 +65,7 @@ def thread(conn, i):
         h.update(seg) #actualiza el hash
         seg = f.read(buff_size)
 
-
+    tiempo_final = round(time.time() - tiempo_inicio,5)
     time.sleep(1)
     f.close()
 
@@ -76,7 +76,7 @@ def thread(conn, i):
     print('se envio el hash del archivo al cliente: ', i)
     print(hash_archivo)
 
-    tiempo_final = round(time.time() - tiempo_inicio,5)
+    
     print("El tiempo transcurrido fue: "+ str(tiempo_final)+" segundos")
     conn.close()
 
