@@ -19,7 +19,7 @@ esperando = True
 
 arch1 = 'arch1.txt'
 
-arch2 = 'arch2.txt'
+arch2 = 'arch2.mp4'
 
 #funcion que corre en paralelo para interactuar con los clientes
 def thread(conn, i):
@@ -49,7 +49,7 @@ def thread(conn, i):
 
     if numero_archivo == 2:
         conn.send(len(arch2).to_bytes(4,'big'))
-        conn.send(arch1.encode('ascii')) #envia nombre del archivo
+        conn.send(arch2.encode('ascii')) #envia nombre del archivo
         conn.send(os.path.getsize(arch2).to_bytes(8,'big')) # envia tamaño del archivo
         f = open(arch2, 'rb')
     
@@ -64,6 +64,9 @@ def thread(conn, i):
         conn.send(seg)
         h.update(seg) #actualiza el hash
         seg = f.read(buff_size)
+
+
+    time.sleep(1)
     f.close()
 
     print('Se envio el archivo al cliente: ', i)
