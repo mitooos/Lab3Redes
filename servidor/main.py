@@ -4,6 +4,8 @@ import threading
 import hashlib
 import os
 import time
+from datetime import date
+from datetime import datetime
 
 buff_size = 1024
 
@@ -29,8 +31,8 @@ def thread(conn, i):
     print('El cliente', i, 'se conecto')
     print(ehlo)
 
-    log = open ('log.txt','wa')
-    log.write(str(time.time()))
+    log = open ('log.txt','a')
+    log.write('\n'+time.ctime(time.time()))
     
 
     conn.send('Que archivo desea?'.encode('ascii'))
@@ -88,7 +90,7 @@ def thread(conn, i):
     print('se envio el hash del archivo al cliente: ', i)
     print(hash_archivo)
     
-    log.write('\n'+clientes[i]+'//'+str(tiempo_final)+' seg')
+    log.write('\n cliente '+clientes[i-1]+' en tiempo '+str(tiempo_final)+' seg')
     
     print("El tiempo transcurrido fue: "+ str(tiempo_final)+" segundos")
     
